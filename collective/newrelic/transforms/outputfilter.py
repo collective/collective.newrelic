@@ -45,21 +45,26 @@ class NewRelic(object):
         should remain unmodified.
         """
 
-        try:
-            utool = getToolByName(context, 'portal_url')
-            ctool = getToolByName(context, 'portal_catalog')
-            mimereg = getToolByName(context, 'mimetypes_registry')
-        except:
-            return data
-
         soup = BeautifulSoup(data)
-        body = soup.find('body')
-        head = soup.find('head')
 
         trans = newrelic.agent.current_transaction()
 
-        head.insert( 99 , NavigableString( trans.browser_timing_header() ) )
-        body.insert( 99 , NavigableString( trans.browser_timing_footer() ) )      
+        if trans is not None:
+            inshead = trans.browser_timing_header()
+            insfoot = trans.browser_timing_footer()
+
+            if inshead is not '':
+                soup.head.insert( 0 , inshead )
+
+            if insfoot is not '':
+                soup.body.insert( len(soup.body.contents), '<div id="newrelic_wrapper">' + insfoot + '</div>')      
+
+
+            result = str(soup)
+
+            return result
+        else:
+            print "No NewRelic transaction in RUM-transform"
 
         return str(soup)
 

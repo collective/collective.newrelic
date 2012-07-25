@@ -41,14 +41,17 @@ def newrelic_publish(request, module_name, after_list, debug=0,
     application = newrelic.api.application.application()
     environ = {}
 
-    trans = newrelic.api.web_transaction.WebTransaction(application,environ)
+    trans = None
 
-    trans.name_transaction(request['PATH_INFO'][1:], priority=1)
-    trans.__enter__()
+    if newrelic.agent.current_transaction() is None:
+        trans = newrelic.api.web_transaction.WebTransaction(application,environ)
+        trans.name_transaction(request['PATH_INFO'][1:], priority=1)
+        trans.__enter__()
 
     result = original_publish(request, module_name, after_list, debug, call_object, missing_name, dont_publish_class, mapply)
     
-    trans.__exit__(None, None, None)
+    if trans:
+        trans.__exit__(None, None, None)
 
     return result
 
