@@ -1,2 +1,6 @@
 recursive-include collective *
 global-exclude *pyc
+
+recursive-include docs * 
+recursive-include collective * 
+

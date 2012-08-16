@@ -1,14 +1,20 @@
-from Products.CMFCore.utils import getToolByName
-from BeautifulSoup import BeautifulSoup, Tag, NavigableString
+
 from urllib2 import unquote
 from urlparse import urlsplit
+
+from zope.interface import implements, Interface
+from plone.transformchain.interfaces import ITransform
+from plone.app.theming.interfaces import IThemingLayer
+from zope.component import adapts
 
 import newrelic.agent
 
 class NewRelic(object):
-    """Outputfilter that adds sizes to links to images / files"""
+    """Outputfilter that adds NewRelic Real User Monitoring to content"""
+    implements(ITransform)
+    adapts(Interface, IThemingLayer)
 
-    order = 666  # early, before Diazo does it's job
+    order = 9000  # Late, after Diazo does it's job
 
     blacklist_extensions = ('html', 'xhtml', 'com')
 
@@ -36,6 +42,7 @@ class NewRelic(object):
                     content_type.startswith('application/xhtml+xml')):
             return data
 
+        return data
         return self._apply_transform(context, data)
 
     def _apply_transform(self, context, data):
@@ -45,28 +52,14 @@ class NewRelic(object):
         should remain unmodified.
         """
 
-        soup = BeautifulSoup(data)
-
         trans = newrelic.agent.current_transaction()
 
-        if trans is not None:
-            inshead = trans.browser_timing_header()
-            insfoot = trans.browser_timing_footer()
+        if False and  trans is not None:
+            data = data.replace('<head>' , "<head>\n%s" % trans.browser_timing_header() )
+            data = data.replace('</html>', "%s\n</html>" % trans.browser_timing_footer() )
+            print 'Wel RUM'
 
-            if inshead is not '':
-                soup.head.insert( 0 , inshead )
-
-            if insfoot is not '':
-                soup.body.insert( len(soup.body.contents), '<div id="newrelic_wrapper">' + insfoot + '</div>')      
-
-
-            result = str(soup)
-
-            return result
-        else:
-            print "No NewRelic transaction in RUM-transform"
-
-        return str(soup)
+        return data
 
     def transformString(self, result, encoding):
         return self._transform(result)
@@ -76,3 +69,5 @@ class NewRelic(object):
 
     def transformIterable(self, result, encoding):
         return [self._transform(s) for s in result]
+
+
