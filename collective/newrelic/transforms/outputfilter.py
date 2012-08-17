@@ -16,7 +16,6 @@ class NewRelic(object):
     order = 8899  # Late, after Diazo does it's job
 
     def __init__(self, context=None, request=None):
-
         self.context = context
         self.request = request
 
@@ -36,12 +35,12 @@ class NewRelic(object):
             return None
 
         head = result.tree.find('head')
-        if head:
+        if len(head):
             o = lxml.etree.XML(trans.browser_timing_header())
             head.insert( 0, o )
 
         foot = result.tree.find('body')
-        if foot:
+        if len(foot):
             o = lxml.etree.XML(trans.browser_timing_footer())
             foot.insert( 10000, o )
 
