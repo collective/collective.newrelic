@@ -5,7 +5,8 @@ import newrelic.agent
 # This is one is required: it creates the 'webtransaction'
 import zpublisher_publish
 
-# Deze geeft problemen met diazo
+# Enable/disable as you like
+
 import zpublisher_mapply
 
 import transformchains
