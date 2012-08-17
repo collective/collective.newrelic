@@ -1,5 +1,7 @@
 from zope.event import *
 
+import newrelic.agent
+
 def newrelic_notify(event):
     """ Notify all subscribers of ``event``.
     """

@@ -1,7 +1,10 @@
 import ZPublisher
-from ZPublisher.mapply import (mapply, default_missing_name, default_handle_class)
+from ZPublisher.mapply import (default_missing_name, default_handle_class)
 
-original_mapply = mapply
+import newrelic.agent
+import newrelic.api
+
+original_mapply = ZPublisher.mapply.mapply
 
 def newrelic_mapply(object, positional=(), keyword={},
            debug=None, maybe=None,

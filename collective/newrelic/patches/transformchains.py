@@ -1,5 +1,7 @@
 from plone.transformchain.transformer import *
 
+import newrelic.agent
+
 original_transform_call = Transformer.__call__
 
 def newrelic_transform__call__(self, request, result, encoding):
@@ -37,6 +39,8 @@ def newrelic_transform__call__(self, request, result, encoding):
     except ConflictError:
         raise
     except Exception, e:
+        import pdb
+        pdb.set_trace()
         LOGGER.exception(u"Unexpected error whilst trying to apply transform chain")
 
 Transformer.__call__ = newrelic_transform__call__

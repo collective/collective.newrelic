@@ -7,6 +7,9 @@ from ZPublisher.mapply import mapply
 import newrelic.agent
 import newrelic.api
 
+import newrelic.api.transaction
+import newrelic.api.web_transaction
+
 original_publish = publish
 
 def newrelic_publish(request, module_name, after_list, debug=0,
