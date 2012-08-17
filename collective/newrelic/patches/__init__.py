@@ -6,7 +6,7 @@ import newrelic.agent
 import zpublisher_publish
 
 # Deze geeft problemen met diazo
-# import zpublisher_mapply
+import zpublisher_mapply
 
 import transformchains
 
@@ -14,7 +14,12 @@ import zope_event
 
 import catalog_tool
 
-newrelic.agent.initialize('newrelic.ini', 'staging')
+try:
+    newrelic.agent.initialize('newrelic.ini', 'staging')
+except:
+    pass
+
+
 
 
 

@@ -16,6 +16,7 @@ class NewRelic(object):
     order = 8899  # Late, after Diazo does it's job
 
     def __init__(self, context=None, request=None):
+
         self.context = context
         self.request = request
 
