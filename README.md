@@ -17,6 +17,7 @@ parts +=
 recipe = zc.recipe.egg:scripts                                                 
 eggs = newrelic 
 
+Please note: the newrelic package needs python >= 2.5. This package will not work on Plone 3.
 
 ============
 Use
