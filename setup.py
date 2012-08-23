@@ -8,7 +8,7 @@ tests_require = ['zope.testing']
 setup(name='collective.newrelic',
       version=version,
       description="Zope/Plone Newrelic instrumentation",
-      long_description=open("README.txt").read() + "\n" +
+      long_description=open("README.md").read() + "\n" +
                        open(os.path.join("docs", "TODO.txt")).read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from
