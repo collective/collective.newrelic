@@ -8,14 +8,26 @@ This package offers instrumentation for NewRelic ( http://www.newrelic.com ). Cu
 Installation
 ============
 
-You can add this egg 'collective.newrelic' to your eggs and it will pull in the 'newrelic' egg too. However, to get the scripts installed into your bin directory, you need to add this to your buildout.cfg:
+You can add this egg 'collective.newrelic' to your eggs and it will pull in the 'newrelic' egg too. However, to get the scripts installed into your bin directory, you need to add this to your buildout.cfg (using mr.developer):
+
+sources = sources
 
 parts +=
     newrelic
 
+auto-checkout =
+    collective.newrelic
+
+[sources]
+collective.newrelic = git git@github.com:Goldmund-Wyldebeast-Wunderliebe/collective.newrelic.git
+
 [newrelic]                                                                     
 recipe = zc.recipe.egg:scripts                                                 
-eggs = newrelic 
+eggs = newrelic
+
+[instance]
+eggs +=
+    collective.newrelic
 
 Please note: the newrelic package needs python >= 2.5. This package will not work on Plone 3.
 
