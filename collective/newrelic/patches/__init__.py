@@ -15,6 +15,8 @@ import zope_event
 
 import catalog_tool
 
+import talinterpreter
+
 try:
     newrelic.agent.initialize('newrelic.ini', 'staging')
 except:
