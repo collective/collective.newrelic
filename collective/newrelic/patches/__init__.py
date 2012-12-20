@@ -18,7 +18,7 @@ import catalog_tool
 import talinterpreter
 
 try:
-    newrelic.agent.initialize('newrelic.ini', 'staging')
+    newrelic.agent.initialize('newrelic.ini', 'development')
 except:
     pass
 
