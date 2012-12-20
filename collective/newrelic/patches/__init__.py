@@ -17,8 +17,13 @@ import catalog_tool
 
 import talinterpreter
 
+import Globals
+
 try:
-    newrelic.agent.initialize('newrelic.ini', 'development')
+    if Globals.DevelopmentMode:
+        newrelic.agent.initialize('newrelic.ini', 'development')
+    else:
+        newrelic.agent.initialize('newrelic.ini', 'staging')
 except:
     pass
 
