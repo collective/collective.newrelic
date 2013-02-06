@@ -15,8 +15,6 @@ import zope_event
 
 import catalog_tool
 
-import profiler
-
 import Globals
 
 try:
@@ -26,8 +24,3 @@ try:
         newrelic.agent.initialize('newrelic.ini', 'staging')
 except:
     pass
-
-
-
-
-
