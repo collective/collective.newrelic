@@ -15,7 +15,7 @@ import zope_event
 
 import catalog_tool
 
-import talinterpreter
+import profiler
 
 import Globals
 
