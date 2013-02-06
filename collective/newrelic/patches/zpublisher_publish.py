@@ -27,7 +27,14 @@ def newrelic_publish(request, module_name, after_list, debug=0,
 
     if newrelic.agent.current_transaction() is None:
         trans = newrelic.api.web_transaction.WebTransaction(application,environ)
-        trans.name_transaction(request['PATH_INFO'][1:], priority=1)
+        if "VirtualHostRoot" in request['PATH_INFO']:
+            vhr_index = request['PATH_INFO'].index("VirtualHostRoot") + len("VirtualHostRoot/")
+            transname = request['PATH_INFO'][vhr_index:]
+            if not transname:
+                transname = '/'
+            trans.name_transaction(transname, priority=1)    
+        else:
+            trans.name_transaction(request['PATH_INFO'][1:], priority=1)    
         trans.__enter__()
 
     result = original_publish(request, module_name, after_list, debug, call_object, missing_name, dont_publish_class, mapply)

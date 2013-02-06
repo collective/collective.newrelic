@@ -1,4 +1,5 @@
 from plone.transformchain.transformer import *
+from ZServer.FTPRequest import FTPRequest
 
 import newrelic.agent
 
