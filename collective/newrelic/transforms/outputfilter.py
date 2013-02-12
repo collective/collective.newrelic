@@ -1,6 +1,13 @@
 from zope.interface import implements, Interface
 from plone.transformchain.interfaces import ITransform
-from plone.app.theming.interfaces import IThemingLayer
+
+# Try to use plone.app.theming. If that fails use zope.interface.Interface
+# zope.interface.Interface results that every requests is adapted instead of a theming layer.
+try:
+    from plone.app.theming.interfaces import IThemingLayer
+except ImportError:
+    from zope.interface import Interface as IThemingLayer
+
 from zope.component import adapts
 
 import newrelic.agent
