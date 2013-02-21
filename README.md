@@ -49,6 +49,44 @@ to
 
     transaction_tracer.record_sql = raw
 
+=============
+Example usage
+=============
+In utils you find a few helper functions to wrap (parts) of your products and/or plone and/or any python module.
+For example you could make a simple egg called myproduct.newrelic with only an __init__.py.
+Within that file you have a '''initialize''' function, therein you use the helper functions for further wrapping.
+
+----------------------------------------
+Full class+function wrapping of an etire egg or module
+----------------------------------------
+    from plone.app import viewletmanager as plone_viewletmanager
+    from collective.newrelic.utils import wrap_module_classes_functions
+    class_function_modules = [plone_viewletmanager, ]
+    wrapped_methods = wrap_module_classes_functions(class_function_modules)
+    print len(wrapped_functions)
+
+---------------------
+Single class wrapping
+---------------------
+    from zope.tal.talinterpreter import TALInterpreter 
+    from collective.newrelic.utils import wrap_class_found_functions
+    wrapped_methods = wrap_class_found_functions(TALInterpreter)
+    print len(wrapped_functions)    
+
+----------------------------------------
+Pin point precision wrapping of single class function
+----------------------------------------
+    from zope.tal.talinterpreter import TALInterpreter
+    from collective.newrelic.utils import wrap_class_function
+    wrapped_methods = wrap_class_function(TALInterpreter, TALInterpreter.__cal__)
+    print wrapped_methods
+        "TALInterpreter.__cal__"
+
+
+
+
+
+
 ============
 References
 ============
