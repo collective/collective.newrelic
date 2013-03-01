@@ -1,9 +1,20 @@
-from plone.transformchain.transformer import *
+from plone.transformchain.transformer import (
+                                                ConflictError,\
+                                                getAdapters,\
+                                                ITransform,\
+                                                LOGGER,\
+                                                sort_key,\
+                                                Transformer,\
+                                                DISABLE_TRANSFORM_REQUEST_KEY,
+                                                )
 from ZServer.FTPRequest import FTPRequest
 
 import newrelic.agent
+from collective.newrelic.utils import logger
 
+#Save original for further use.
 original_transform_call = Transformer.__call__
+
 
 def newrelic_transform__call__(self, request, result, encoding):
 
@@ -43,4 +54,4 @@ def newrelic_transform__call__(self, request, result, encoding):
         LOGGER.exception(u"Unexpected error whilst trying to apply transform chain")
 
 Transformer.__call__ = newrelic_transform__call__
-
+logger.info("Patched plone.transformchain.transformer:Transformer.__call__ with instrumentation")

@@ -48,7 +48,7 @@ def newrelic_wrapper(our_class, orig_func, newrelic_label):
 
     # Monkey patch and report
     setattr(our_class, func_name, newrelic_function_wrapper)
-    logger.info("{0}:{1}{2} wrapped".format(mod_name, class_name, func_name))
+    logger.debug("{0}:{1}{2} wrapped".format(mod_name, class_name, func_name))
 
 
 # Helper functions for collection

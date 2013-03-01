@@ -9,8 +9,11 @@ import newrelic.api
 
 import newrelic.api.transaction
 import newrelic.api.web_transaction
+from collective.newrelic.utils import logger
 
+#Keep original for further use
 original_publish = publish
+
 
 def newrelic_publish(request, module_name, after_list, debug=0,
             # Optimize:
@@ -26,23 +29,23 @@ def newrelic_publish(request, module_name, after_list, debug=0,
     trans = None
 
     if newrelic.agent.current_transaction() is None:
-        trans = newrelic.api.web_transaction.WebTransaction(application,environ)
+        trans = newrelic.api.web_transaction.WebTransaction(application, environ)
         if "VirtualHostRoot" in request['PATH_INFO']:
             vhr_index = request['PATH_INFO'].index("VirtualHostRoot") + len("VirtualHostRoot/")
             transname = request['PATH_INFO'][vhr_index:]
             if not transname:
                 transname = '/'
-            trans.name_transaction(transname, priority=1)    
+            trans.name_transaction(transname, priority=1)
         else:
-            trans.name_transaction(request['PATH_INFO'][1:], priority=1)    
+            trans.name_transaction(request['PATH_INFO'][1:], priority=1)
         trans.__enter__()
 
     result = original_publish(request, module_name, after_list, debug, call_object, missing_name, dont_publish_class, mapply)
-    
+
     if trans:
         trans.__exit__(None, None, None)
 
     return result
 
 ZPublisher.Publish.publish = newrelic_publish
-
+logger.info("Patched ZPublisher.Publish:publish with instrumentation")

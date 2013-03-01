@@ -2,8 +2,10 @@ import newrelic.agent
 import newrelic.api
 
 from Products.CMFPlone.CatalogTool import CatalogTool
+from collective.newrelic.utils import logger
 
 CatalogTool.original_cmfplone_catalogtool_searchResults = CatalogTool.searchResults
+
 
 def newrelic_searchResults(self, REQUEST=None, **kw):
     trans = newrelic.agent.current_transaction()
@@ -14,5 +16,4 @@ def newrelic_searchResults(self, REQUEST=None, **kw):
     return result
 
 CatalogTool.searchResults = newrelic_searchResults
-
-
+logger.info("Patched Products.CMFPlone.CatalogTool:CatalogTool.searchResults with instrumentation")
