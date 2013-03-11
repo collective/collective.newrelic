@@ -29,7 +29,7 @@ def patched_record_transaction(self, data):
         return
 
     #If current thread already has a lock, return.
-    if getattr(self._thread_data, 'has_lock', False):
+    if getattr(self._thread_data, 'has_stats_lock', False):
         return
 
     # Do checks to see whether trying to record a transaction in a
@@ -58,7 +58,7 @@ def patched_record_transaction(self, data):
 
         with self._stats_lock:
             try:
-                self._thread_data.has_lock = True
+                self._thread_data.has_stats_lock = True
 
                 self._transaction_count += 1
                 self._last_transaction = data.end_time
@@ -84,7 +84,7 @@ def patched_record_transaction(self, data):
                         'Please report this problem to New Relic support '
                         'for further investigation.')
             finally:
-                self._thread_data.has_lock = False
+                self._thread_data.has_stats_lock = False
 
 Application.record_transaction = patched_record_transaction
 logger.info("Patched newrelic.core.application:Application.record_transaction to work with thread.local for early lock checking")
