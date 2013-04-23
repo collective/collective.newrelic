@@ -20,6 +20,8 @@ import catalog_tool
 
 import talinterpreter
 
+import five_browser_resource
+
 import Globals
 
 

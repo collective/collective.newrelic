@@ -30,9 +30,9 @@ def newrelic__init__(self, accept):
                         transname = a['PATH_INFO'][vhr_index:]
                         if not transname:
                             transname = '/'
-                        trans.name_transaction(transname, priority=1)
+                        trans.name_transaction(transname, group='Zope2', priority=1)
                     else:
-                        trans.name_transaction(a['PATH_INFO'][1:], priority=1)
+                        trans.name_transaction(a['PATH_INFO'][1:], group='Zope2', priority=1)
                     trans.__enter__()
 
                     publish_module(
