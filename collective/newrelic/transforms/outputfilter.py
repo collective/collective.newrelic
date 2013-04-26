@@ -14,6 +14,7 @@ import newrelic.agent
 
 from lxml import etree
 from repoze.xmliter.utils import getHTMLSerializer
+from collective.newrelic.patches.zserverpublisher import PLACEHOLDER
 
 class NewRelic(object):
     """Outputfilter that adds NewRelic Real User Monitoring to content.
@@ -58,6 +59,9 @@ class NewRelic(object):
         trans = newrelic.agent.current_transaction()
 
         if trans is None:
+            return result
+
+        if trans.name == PLACEHOLDER:
             return result
 
         head = result.tree.find('head')

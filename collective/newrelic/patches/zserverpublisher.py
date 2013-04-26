@@ -11,6 +11,8 @@ LOG = logging.getLogger('ZServerPublisher')
 original__init__ = ZServerPublisher.__init__
 from collective.newrelic.utils import logger
 
+PLACEHOLDER = "PLACEHOLDER"
+
 def newrelic__init__(self, accept):
     from sys import exc_info
     from ZPublisher import publish_module
@@ -25,14 +27,7 @@ def newrelic__init__(self, accept):
                     application = newrelic.api.application.application_instance()
                     environ = {}
                     trans = newrelic.api.web_transaction.WebTransaction(application, environ)
-                    if "VirtualHostRoot" in a['PATH_INFO']:
-                        vhr_index = a['PATH_INFO'].index("VirtualHostRoot") + len("VirtualHostRoot/")
-                        transname = a['PATH_INFO'][vhr_index:]
-                        if not transname:
-                            transname = '/'
-                        trans.name_transaction(transname, group='Zope2', priority=1)
-                    else:
-                        trans.name_transaction(a['PATH_INFO'][1:], group='Zope2', priority=1)
+                    trans.name_transaction(PLACEHOLDER, group='Zope2', priority=1)
                     trans.__enter__()
 
                     publish_module(
@@ -42,6 +37,8 @@ def newrelic__init__(self, accept):
                 finally:
                     b._finish()
                     if trans:
+                        if trans.name == 'PLACEHOLDER':
+                            newrelic.agent.ignore_transaction()
                         trans.__exit__(None, None, None)
                     a = b = None
 

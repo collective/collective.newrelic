@@ -9,5 +9,10 @@
 
     <include package=".transforms" />
 
+    <subscriber                                                                
+      for="ZPublisher.interfaces.IPubAfterTraversal"             
+      handler=".hooks.newrelic_transaction"                              
+      />    
+
 </configure>
 
