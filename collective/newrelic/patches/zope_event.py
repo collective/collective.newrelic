@@ -1,8 +1,7 @@
-#from zope.event import *
+from collective.newrelic.utils import logger
 from zope import event
 from zope.event import subscribers
 import newrelic.agent
-from collective.newrelic.utils import logger
 
 
 def newrelic_notify(event):
