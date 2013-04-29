@@ -1,0 +1,16 @@
+==================
+1.0.6 - unreleased
+==================
+ - Changed naming of transactions, now based on view/templates being used
+ - Ignore transactions for resource files (js, css, kss(?))
+
+
+==================
+1.0.5 - unreleased
+==================
+ - First production test version
+
+==================
+prior 1.0.5 
+==================
+ - Inital code implemtation and testing
