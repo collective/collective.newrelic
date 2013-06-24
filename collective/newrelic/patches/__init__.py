@@ -20,7 +20,11 @@ import catalog_tool
 
 import talinterpreter
 
+import cron4plone
+
 import Globals
+
+
 
 
 try:
