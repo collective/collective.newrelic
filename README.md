@@ -56,9 +56,9 @@ In utils you find a few helper functions to wrap (parts) of your products and/or
 For example you could make a simple egg called myproduct.newrelic with only an __init__.py.
 Within that file you have a '''initialize''' function, therein you use the helper functions for further wrapping.
 
-------------------------------------------------------
-Full class+function wrapping of an etire egg or module
-------------------------------------------------------
+-------------------------------------------------------
+Full class+function wrapping of an entire egg or module
+-------------------------------------------------------
     from plone.app import viewletmanager as plone_viewletmanager
     from collective.newrelic.utils import wrap_module_classes_functions
     class_function_modules = [plone_viewletmanager, ]
