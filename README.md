@@ -63,7 +63,7 @@ Full class+function wrapping of an entire egg or module
     from collective.newrelic.utils import wrap_module_classes_functions
     class_function_modules = [plone_viewletmanager, ]
     wrapped_methods = wrap_module_classes_functions(class_function_modules)
-    print len(wrapped_functions)
+    print len(wrapped_methods)
 
 ---------------------
 Single class wrapping
@@ -71,7 +71,7 @@ Single class wrapping
     from zope.tal.talinterpreter import TALInterpreter
     from collective.newrelic.utils import wrap_class_found_functions
     wrapped_methods = wrap_class_found_functions(TALInterpreter)
-    print len(wrapped_functions)
+    print len(wrapped_methods)
 
 ----------------------------------------
 Pin point precision wrapping of single class function
