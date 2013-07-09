@@ -20,4 +20,4 @@ if HAS_CRON4PLONE:
     CronTick.tick = patched_tick
     logger.info("Patched Products.cron4plone.browser.CronTick:tick to become a background task")
 else:
-    logger.inofo("Unable to patched Products.cron4plone, probably not used.")
+    logger.info("Unable to patched Products.cron4plone, probably not used.")
