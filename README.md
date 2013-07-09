@@ -21,8 +21,8 @@ You can add this egg 'collective.newrelic' to your eggs and it will pull in the 
     [sources]
     collective.newrelic = git git@github.com:Goldmund-Wyldebeast-Wunderliebe/collective.newrelic.git
 
-    [newrelic]                                                                     
-    recipe = zc.recipe.egg:scripts                                                 
+    [newrelic]
+    recipe = zc.recipe.egg:scripts
     eggs = newrelic
 
     [instance]
@@ -37,11 +37,11 @@ Use
 
 To enable the logging to newrelic.com, create an account at newrelic.com and get your license key. Create a 'newrelic.ini' file in the root of your project. Either by copying the template from this package or the newrelic package or run:
 
-$ bin/newrelic-admin generate-config YOUR-LICENSE-KEY newrelic.ini 
+$ bin/newrelic-admin generate-config YOUR-LICENSE-KEY newrelic.ini
 
 This will create a newrelic.ini file in the current directory.
 
-The default profile is 'staging', this can be changed in the __init__.py in the patches directory. You can change the default name of 'Python Application (Staging)' in the newrelic.ini file. To get sensible database-traces change
+The default profile is 'staging', this can be changed in the `__init__.py` in the patches directory. You can change the default name of 'Python Application (Staging)' in the newrelic.ini file. To get sensible database-traces change
 
     transaction_tracer.record_sql = obfuscated
 
@@ -53,7 +53,7 @@ to
 Example usage
 =============
 In utils you find a few helper functions to wrap (parts) of your products and/or plone and/or any python module.
-For example you could make a simple egg called myproduct.newrelic with only an __init__.py.
+For example you could make a simple egg called myproduct.newrelic with only an `__init__.py`.
 Within that file you have a '''initialize''' function, therein you use the helper functions for further wrapping.
 
 -------------------------------------------------------
@@ -68,10 +68,10 @@ Full class+function wrapping of an entire egg or module
 ---------------------
 Single class wrapping
 ---------------------
-    from zope.tal.talinterpreter import TALInterpreter 
+    from zope.tal.talinterpreter import TALInterpreter
     from collective.newrelic.utils import wrap_class_found_functions
     wrapped_methods = wrap_class_found_functions(TALInterpreter)
-    print len(wrapped_functions)    
+    print len(wrapped_functions)
 
 ----------------------------------------
 Pin point precision wrapping of single class function
