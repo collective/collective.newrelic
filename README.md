@@ -92,7 +92,7 @@ log, check your ``newrelic.ini`` file and make sure its
 ``[newrelic:development]`` has ``monitor_mode = true``.
 
 It can also mean that the newrelic.ini cannot be found.
-For example, if you run ``${buildout:directory}:/bin/instance fg``,
+For example, if you run ``${buildout:directory}/bin/instance fg``,
 Newrelic looks in ``${buildout:directory}`` for the .ini file.
 When started via supervisor, it looks in ``${buildout:directory}/bin/``
 
