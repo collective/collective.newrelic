@@ -40,5 +40,4 @@ setup(name='collective.newrelic',
       target = plone
       """,
       setup_requires=[],
-      paster_plugins=[],
       )

@@ -1,6 +1,3 @@
-collective.newrelic
-===================
-
 Introduction
 ------------
 
