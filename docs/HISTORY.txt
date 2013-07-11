@@ -1,16 +1,26 @@
-==================
+Change history
+==============
+
+1.0.7 (2013-07-11)
+-------------------
+
+ - Documentation typos [khink]
+ - Documentation checking for pypi release [puittenbroek]
+ - Patch cron4plone tick (if present) to make it a backgroundtask [puittenbroek]
+ - Improve hook logic to worker properly in ZMI [puittenbroek]
+
 1.0.6 - unreleased
-==================
- - Changed naming of transactions, now based on view/templates being used
- - Ignore transactions for resource files (js, css, kss(?))
+-------------------
+
+ - Changed naming of transactions, now based on view/templates being used [puittenbroek]
+ - Ignore transactions for resource files (js, css, kss(?)) [puittenbroek]
 
 
-==================
 1.0.5 - unreleased
-==================
+-------------------
+
  - First production test version
 
-==================
 prior 1.0.5 
-==================
+-------------------
  - Inital code implemtation and testing

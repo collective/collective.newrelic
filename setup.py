@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0.6'
+version = '1.0.7'
 
 tests_require = ['zope.testing']
 
@@ -18,9 +18,9 @@ setup(name='collective.newrelic',
         "Programming Language :: Python",
         ],
       keywords='',
-      author='',
-      author_email='',
-      url='http://svn.plone.org/svn/collective/',
+      author='Douwe van der Meij, Peter Uittenbroek',
+      author_email='support@gw20e.com',
+      url='https://github.com/Goldmund-Wyldebeast-Wunderliebe/collective.newrelic',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['collective', ],
