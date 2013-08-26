@@ -29,7 +29,8 @@ setup(name='collective.newrelic',
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
-          'newrelic'
+          'newrelic',
+          'repoze.xmliter'
       ],
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),
