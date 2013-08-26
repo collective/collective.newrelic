@@ -17,7 +17,7 @@ You can add this egg 'collective.newrelic' to your eggs and it will pull in the 
         collective.newrelic
 
     [sources]
-    collective.newrelic = git git@github.com:Goldmund-Wyldebeast-Wunderliebe/collective.newrelic.git
+    collective.newrelic = git git@github.com:collective/collective.newrelic.git 
 
     [newrelic]
     recipe = zc.recipe.egg:scripts
