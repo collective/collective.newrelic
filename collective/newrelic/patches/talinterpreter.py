@@ -7,8 +7,13 @@ original_function = TALInterpreter.__call__
 
 
 def monkeypatch(self):
-    name = self.program[2][1].split('/')
-    newrelic_monkeypatch = newrelic.agent.FunctionTraceWrapper(original_function, name[-1], 'Zope/TAL')
+    probable_name = self.program[2][1]
+    name = "Value (non-file)"
+    if type(probable_name) in [str, unicode]:
+        name = probable_name.split('/')
+        name = name[-1]
+
+    newrelic_monkeypatch = newrelic.agent.FunctionTraceWrapper(original_function, name, 'Zope/TAL')
     newrelic_monkeypatch(self)
 
 TALInterpreter.__call__ = monkeypatch

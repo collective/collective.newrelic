@@ -1,6 +1,12 @@
 Change history
 ==============
 
+1.0.8 (2013-10-02)
+-------------------
+
+ - Fix: TALInterpreter patch fails when PageTemplate is made by value instead of file [puittenbroek]
+ - Added dependency on repoze.xmliter [fiterbek]
+
 1.0.7 (2013-07-11)
 -------------------
 
