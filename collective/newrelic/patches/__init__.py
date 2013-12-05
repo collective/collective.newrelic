@@ -39,6 +39,6 @@ try:
         newrelic.agent.initialize(config_file, 'development')
     else:
         newrelic.agent.initialize(config_file, 'staging')
-    logger.info('New relic agent configuration set from %s.' % config_file)
+    logger.info('New Relic Python Agent configuration set from %s.' % config_file)
 except:
     pass
