@@ -8,42 +8,41 @@ Installation
 
 You can add this egg 'collective.newrelic' to your eggs and it will pull in the 'newrelic' egg too. 
 
-[buildout]
+    [buildout]
+    
+    # either pin versions as shown below...  
+    versions=versions
+    
+    [versions]
+    newrelic = 2.6.0.5
+    repoze.xmliter = 0.5
+    # update to 1.0.9 on next release:
+    collective.newrelic = 1.0.8 
 
-# either pin versions as shown below...  
-versions=versions
+    # ...or allow picked versions and risk breakage on product updates
+    #allow-picked-versions = true
+    
+    parts +=
+        newrelic    
 
-[versions]
-newrelic = 2.6.0.5
-repoze.xmliter = 0.5
-# update to 1.0.9 on next release:
-collective.newrelic = 1.0.8 
+    [newrelic]
+    recipe = zc.recipe.egg:scripts
+    eggs = newrelic
+    
+    [instance]
+    eggs +=
+        collective.newrelic
+    
+    # make sure newrelic itself is enabled and set the path to your newrelic.ini file
+    environment-vars +=
+        NEW_RELIC_ENABLED true
+        NEW_RELIC_CONFIG_FILE ${buildout:directory}/newrelic.ini
+    
+    # when using supervisor, setting environment variables is slightly different:
+    #[supervisor]
+    #supervisord-environment=NEW_RELIC_ENABLED=true,NEW_RELIC_CONFIG_FILE=${buildout:directory}/newrelic.ini
 
-# ...or allow picked versions and risk breakage on product updates
-#allow-picked-versions = true
-
-parts +=
-    newrelic    
-
-[newrelic]
-recipe = zc.recipe.egg:scripts
-eggs = newrelic
-
-[instance]
-eggs +=
-    collective.newrelic
-
-# make sure newrelic itself is enabled and set the path to your newrelic.ini file
-environment-vars +=
-    NEW_RELIC_ENABLED true
-    NEW_RELIC_CONFIG_FILE ${buildout:directory}/newrelic.ini
-
-# when using supervisor, setting environment variables is slightly different:
-#[supervisor]
-#supervisord-environment=NEW_RELIC_ENABLED=true,NEW_RELIC_CONFIG_FILE=${buildout:directory}/newrelic.ini
-
-A number of additional settings can optionally be configured using environment variables,
-see https://docs.newrelic.com/docs/python/python-agent-configuration#environment-variables for details.
+A number of additional settings can optionally be configured using environment variables, see http://docs.newrelic.com/docs/python/python-agent-configuration#environment-variables for details.
 Customizing your newrelic.ini file is more advised though, see below.
 
 The NEW_RELIC_ENABLED and NEW_RELIC_CONFIG_FILE variables need to be set for the newrelic agent to work though. 
@@ -109,19 +108,13 @@ Pin point precision wrapping of single class function
 Troubleshooting
 ===============
 
-If you see a message ``The Python Agent is not enabled.`` in the Zope instance 
-log, first check if ``NEW_RELIC_ENABLED`` environment variable was set correctly. 
+If you see a message ``The Python Agent is not enabled.`` in the Zope instance log, first check if ``NEW_RELIC_ENABLED`` environment variable was set correctly. 
 
-If this is ok, check your ``newrelic.ini`` file and make sure the profile 
-you are using (eg ``[newrelic:staging]``) has ``monitor_mode = true``.
+If this is ok, check your ``newrelic.ini`` file and make sure the profile you are using (eg ``[newrelic:staging]``) has ``monitor_mode = true``.
 
-It can also mean that the newrelic.ini cannot be found.
-Make sure the path to your newrelic.ini file is correctly set 
-using the ``NEW_RELIC_CONFIG_FILE`` environment variable.  
+It can also mean that the newrelic.ini cannot be found. Make sure the path to your newrelic.ini file is correctly set using the ``NEW_RELIC_CONFIG_FILE`` environment variable.  
 
-If you see a message ``A valid account license key cannot be found.``, 
-check if you have a valid license key and make sure it is correctly set 
-in the ``newrelic.ini`` file.
+If you see a message ``A valid account license key cannot be found.``, check that you have a valid license key and make sure it is correctly set in the ``newrelic.ini`` file.
 
 References
 ============
