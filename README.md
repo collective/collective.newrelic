@@ -6,26 +6,46 @@ This package offers instrumentation for NewRelic ( http://www.newrelic.com ). Cu
 Installation
 ------------
 
-You can add this egg 'collective.newrelic' to your eggs and it will pull in the 'newrelic' egg too. However, to get the scripts installed into your bin directory, you need to add this to your buildout.cfg (using mr.developer) ::
+You can add this egg 'collective.newrelic' to your eggs and it will pull in the 'newrelic' egg too. 
 
-    sources = sources
+    [buildout]
+    
+    # either pin versions as shown below...  
+    versions=versions
+    
+    [versions]
+    newrelic = 2.6.0.5
+    repoze.xmliter = 0.5
+    # update to 1.0.9 on next release:
+    collective.newrelic = 1.0.8 
 
+    # ...or allow picked versions and risk breakage on product updates
+    #allow-picked-versions = true
+    
     parts +=
-        newrelic
-
-    auto-checkout =
-        collective.newrelic
-
-    [sources]
-    collective.newrelic = git://github.com/collective/collective.newrelic.git 
+        newrelic    
 
     [newrelic]
     recipe = zc.recipe.egg:scripts
     eggs = newrelic
-
+    
     [instance]
     eggs +=
         collective.newrelic
+    
+    # make sure newrelic itself is enabled and set the path to your newrelic.ini file
+    environment-vars +=
+        NEW_RELIC_ENABLED true
+        NEW_RELIC_CONFIG_FILE ${buildout:directory}/newrelic.ini
+    
+    # when using supervisor, setting environment variables is slightly different:
+    #[supervisor]
+    #supervisord-environment=NEW_RELIC_ENABLED=true,NEW_RELIC_CONFIG_FILE=${buildout:directory}/newrelic.ini
+
+A number of additional settings can optionally be configured using environment variables, see http://docs.newrelic.com/docs/python/python-agent-configuration#environment-variables for details.
+Customizing your newrelic.ini file is more advised though, see below.
+
+The NEW_RELIC_ENABLED and NEW_RELIC_CONFIG_FILE variables need to be set for the newrelic agent to work though. 
 
 Please note: the newrelic package needs python >= 2.5. This package will not work on Plone 3.
 
@@ -38,6 +58,8 @@ To enable the logging to newrelic.com, create an account at newrelic.com and get
 
 This will create a newrelic.ini file in the current directory.
 
+You might want to validate your generated file using ``newrelic-admin validate-config newrelic.ini``
+
 The default profile is 'staging', this can be changed in the `__init__.py` in the patches directory. You can change the default name of 'Python Application (Staging)' in the newrelic.ini file. To get sensible database-traces change ::
 
     transaction_tracer.record_sql = obfuscated
@@ -45,6 +67,7 @@ The default profile is 'staging', this can be changed in the `__init__.py` in th
 to ::
 
     transaction_tracer.record_sql = raw
+ 
 
 Example usage
 =============
@@ -85,15 +108,13 @@ Pin point precision wrapping of single class function
 Troubleshooting
 ===============
 
-If you see a message ``The Python Agent is not enabled.`` in the Zope instance
-log, check your ``newrelic.ini`` file and make sure its
-``[newrelic:development]`` has ``monitor_mode = true``.
+If you see a message ``The Python Agent is not enabled.`` in the Zope instance log, first check if ``NEW_RELIC_ENABLED`` environment variable was set correctly. 
 
-It can also mean that the newrelic.ini cannot be found.
-For example, if you run ``${buildout:directory}/bin/instance fg``,
-Newrelic looks in ``${buildout:directory}`` for the .ini file.
-When started via supervisor, it looks in ``${buildout:directory}/bin/``
+If this is ok, check your ``newrelic.ini`` file and make sure the profile you are using (eg ``[newrelic:staging]``) has ``monitor_mode = true``.
 
+It can also mean that the newrelic.ini cannot be found. Make sure the path to your newrelic.ini file is correctly set using the ``NEW_RELIC_CONFIG_FILE`` environment variable.  
+
+If you see a message ``A valid account license key cannot be found.``, check that you have a valid license key and make sure it is correctly set in the ``newrelic.ini`` file.
 
 References
 ============
@@ -102,4 +123,4 @@ References
 
  http://newrelic.com/docs/python/python-agent-installation
 
-
+ http://docs.newrelic.com/docs/python/testing-the-python-agent
