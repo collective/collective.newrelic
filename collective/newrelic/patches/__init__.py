@@ -31,14 +31,8 @@ from collective.newrelic.utils import logger
 
 try:
 # if the environment var was set, use this instead of the default (local) newrelic ini file
-    config_file = os.environ.get('NEW_RELIC_CONFIG_FILE')
-    if config_file is None:
-        config_file = 'newrelic.ini'     
-
-    if Globals.DevelopmentMode:
-        newrelic.agent.initialize(config_file, 'development')
-    else:
-        newrelic.agent.initialize(config_file, 'staging')
+    config_file = os.environ.get('NEW_RELIC_CONFIG_FILE', 'newrelic.ini' )
+    newrelic.agent.initialize(config_file)
     logger.info('New Relic Python Agent configuration set from %s.' % config_file)
 except:
     pass

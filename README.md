@@ -37,15 +37,17 @@ You can add this egg 'collective.newrelic' to your eggs and it will pull in the 
     environment-vars +=
         NEW_RELIC_ENABLED true
         NEW_RELIC_CONFIG_FILE ${buildout:directory}/newrelic.ini
+        NEW_RELIC_ENVIRONMENT development
     
     # when using supervisor, setting environment variables is slightly different:
     #[supervisor]
-    #supervisord-environment=NEW_RELIC_ENABLED=true,NEW_RELIC_CONFIG_FILE=${buildout:directory}/newrelic.ini
+    #supervisord-environment=NEW_RELIC_ENABLED=true,NEW_RELIC_CONFIG_FILE=${buildout:directory}/newrelic.ini,NEW_RELIC_ENVIRONMENT=development
 
 A number of additional settings can optionally be configured using environment variables, see http://docs.newrelic.com/docs/python/python-agent-configuration#environment-variables for details.
 Customizing your newrelic.ini file is more advised though, see below.
 
 The NEW_RELIC_ENABLED and NEW_RELIC_CONFIG_FILE variables need to be set for the newrelic agent to work though. 
+Omitting NEW_RELIC_ENVIRONMENT variable will mean the [newrelic] part is loaded without additional [newrelic:YOURENVNAME] settings.
 
 Please note: the newrelic package needs python >= 2.5. This package will not work on Plone 3.
 
