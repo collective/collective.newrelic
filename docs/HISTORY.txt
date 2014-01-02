@@ -1,6 +1,13 @@
 Change history
 ==============
 
+1.0.9 (2014-01-02)
+-------------------
+ - Introduce and explain NEW_RELIC_ENABLED and NEW_RELIC_CONFIG_FILE enviroment variables  [fiterbek]
+ - Fix documentation formatting [fiterbek]
+ - Print nicer info message [fiterbek]
+ - Update documentation for NEW_RELIC_ENVIRONMENT enviroment variables [puittenbroek]
+
 1.0.8 (2013-10-02)
 -------------------
 
