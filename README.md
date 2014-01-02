@@ -79,7 +79,6 @@ Within that file you have a '''initialize''' function, therein you use the helpe
 
 Full class+function wrapping of an entire module
 ------------------------------------------------
-::
 
     from plone.app import viewletmanager as plone_viewletmanager
     from collective.newrelic.utils import wrap_module_classes_functions
@@ -89,7 +88,6 @@ Full class+function wrapping of an entire module
 
 Single class wrapping 
 ---------------------
-:: 
 
     from zope.tal.talinterpreter import TALInterpreter
     from collective.newrelic.utils import wrap_class_found_functions
@@ -98,7 +96,6 @@ Single class wrapping
 
 Pin point precision wrapping of single class function
 -----------------------------------------------------
-::
 
     from zope.tal.talinterpreter import TALInterpreter
     from collective.newrelic.utils import wrap_class_function
