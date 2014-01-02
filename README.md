@@ -6,7 +6,7 @@ This package offers instrumentation for NewRelic ( http://www.newrelic.com ). Cu
 Installation
 ------------
 
-You can add this egg 'collective.newrelic' to your eggs and it will pull in the 'newrelic' egg too. 
+You can add this egg 'collective.newrelic' to your eggs and it will pull in the 'newrelic' egg too.  ::
 
     [buildout]
     
@@ -47,6 +47,7 @@ A number of additional settings can optionally be configured using environment v
 Customizing your newrelic.ini file is more advised though, see below.
 
 The NEW_RELIC_ENABLED and NEW_RELIC_CONFIG_FILE variables need to be set for the newrelic agent to work though. 
+
 Omitting NEW_RELIC_ENVIRONMENT variable will mean the [newrelic] part is loaded without additional [newrelic:YOURENVNAME] settings.
 
 Please note: the newrelic package needs python >= 2.5. This package will not work on Plone 3.
@@ -79,6 +80,7 @@ Within that file you have a '''initialize''' function, therein you use the helpe
 
 Full class+function wrapping of an entire module
 ------------------------------------------------
+::
 
     from plone.app import viewletmanager as plone_viewletmanager
     from collective.newrelic.utils import wrap_module_classes_functions
@@ -88,6 +90,7 @@ Full class+function wrapping of an entire module
 
 Single class wrapping 
 ---------------------
+:: 
 
     from zope.tal.talinterpreter import TALInterpreter
     from collective.newrelic.utils import wrap_class_found_functions
@@ -96,6 +99,7 @@ Single class wrapping
 
 Pin point precision wrapping of single class function
 -----------------------------------------------------
+::
 
     from zope.tal.talinterpreter import TALInterpreter
     from collective.newrelic.utils import wrap_class_function
@@ -116,7 +120,7 @@ It can also mean that the newrelic.ini cannot be found. Make sure the path to yo
 If you see a message ``A valid account license key cannot be found.``, check that you have a valid license key and make sure it is correctly set in the ``newrelic.ini`` file.
 
 References
-============
+==========
 
  http://www.newrelic.com
 
