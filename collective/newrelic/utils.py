@@ -39,11 +39,11 @@ def newrelic_wrapper(our_class, orig_func, newrelic_label):
         class_name = "{0}.".format(our_class.__name__)
 
     # Our generic wrapper, one size fits all.
-    def newrelic_function_wrapper(self, *args, **kwargs):
+    def newrelic_function_wrapper(*args, **kwargs):
         trans = newrelic.agent.current_transaction()
         outputlabel = "{0}:{1}{2}".format(mod_name, class_name, func_name)
         with newrelic.agent.FunctionTrace(trans, outputlabel, newrelic_label):
-            result = getattr(our_class, orig_func_name)(self, *args, **kwargs)
+            result = getattr(our_class, orig_func_name)(*args, **kwargs)
         return result
 
     # Monkey patch and report
