@@ -16,8 +16,8 @@ You can add this egg 'collective.newrelic' to your eggs and it will pull in the 
     [versions]
     newrelic = 2.18.1.15
     repoze.xmliter = 0.5
-    # update to 1.0.9 on next release:
-    collective.newrelic = 1.0.8 
+    # update to 1.0.10 on next release:
+    collective.newrelic = 1.0.9
 
     # ...or allow picked versions and risk breakage on product updates
     #allow-picked-versions = true

@@ -8,6 +8,7 @@
     i18n_domain="collective.newrelic">
 
     <include package=".transforms" />
+    <include package=".patches" />
 
     <subscriber                                                                
       for="ZPublisher.interfaces.IPubAfterTraversal"             
