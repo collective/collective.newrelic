@@ -45,6 +45,19 @@ class NewRelic(object):
         except (TypeError, etree.ParseError):
             return None
 
+    def wrap_cdata(self, script):
+        """ Wrap javascript in CDATA, this way we can inject the javascript as
+        valid XML using lxml.
+        """
+        script = script.replace(
+            '<script type="text/javascript">',
+            '<script type="text/javascript">//<![CDATA['
+        ).replace(
+            '</script>',
+            '//]]></script>'
+        )
+        return script
+
     def transformString(self, result, encoding):
         return self.transformIterable([result], encoding)
 
@@ -66,14 +79,17 @@ class NewRelic(object):
 
         head = result.tree.find('head')
         if head is not None and len(head):
-            nr_header = etree.HTML(trans.browser_timing_header())
+            head_script = self.wrap_cdata(trans.browser_timing_header())
+            print head_script
+            nr_header = etree.XML(head_script)
             head.insert(0, nr_header)  # Before the first child of head
 
         foot = result.tree.find('body')
         if foot is not None and len(foot):
             nr_footer = trans.browser_timing_footer()
             if nr_footer:
-                o = etree.HTML(trans.browser_timing_footer())
+                footer_script = self.wrap_cdata(trans.browser_timing_footer())
+                o = etree.XML(footer_script)
                 foot.insert(len(foot.getchildren()), o)  # After the last child of body
 
         return result
