@@ -12,7 +12,7 @@ from zope.component import adapts
 
 import newrelic.agent
 
-from lxml import etree
+from lxml import etree, html
 from repoze.xmliter.utils import getHTMLSerializer
 from collective.newrelic.patches.zserverpublisher import PLACEHOLDER
 
@@ -45,19 +45,6 @@ class NewRelic(object):
         except (TypeError, etree.ParseError):
             return None
 
-    def wrap_cdata(self, script):
-        """ Wrap javascript in CDATA, this way we can inject the javascript as
-        valid XML using lxml.
-        """
-        script = script.replace(
-            '<script type="text/javascript">',
-            '<script type="text/javascript">//<![CDATA['
-        ).replace(
-            '</script>',
-            '//]]></script>'
-        )
-        return script
-
     def transformString(self, result, encoding):
         return self.transformIterable([result], encoding)
 
@@ -79,17 +66,16 @@ class NewRelic(object):
 
         head = result.tree.find('head')
         if head is not None and len(head):
-            head_script = self.wrap_cdata(trans.browser_timing_header())
-            print head_script
-            nr_header = etree.XML(head_script)
+            timing_header = trans.browser_timing_header()
+            nr_header = html.fragment_fromstring(timing_header)
             head.insert(0, nr_header)  # Before the first child of head
 
         foot = result.tree.find('body')
         if foot is not None and len(foot):
             nr_footer = trans.browser_timing_footer()
             if nr_footer:
-                footer_script = self.wrap_cdata(trans.browser_timing_footer())
-                o = etree.XML(footer_script)
+                timing_footer = trans.browser_timing_footer()
+                o = html.fragment_fromstring(timing_footer)
                 foot.insert(len(foot.getchildren()), o)  # After the last child of body
 
         return result
