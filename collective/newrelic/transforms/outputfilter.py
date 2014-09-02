@@ -65,15 +65,15 @@ class NewRelic(object):
             return result
 
         head = result.tree.find('head')
-        if head is not None and len(head):
-            nr_header = etree.HTML(trans.browser_timing_header())
-            head.insert(0, nr_header)  # Before the first child of head
-
         foot = result.tree.find('body')
-        if foot is not None and len(foot):
+        if head is not None and len(head) and foot is not None and len(foot):
+            nr_header = trans.browser_timing_header()
             nr_footer = trans.browser_timing_footer()
-            if nr_footer:
-                o = etree.HTML(trans.browser_timing_footer())
-                foot.insert(len(foot.getchildren()), o)  # After the last child of body
+            if nr_header and nr_footer:
+                o_head = etree.HTML(nr_header)
+                head.insert(0, o_head)  # Before the first child of head
+                o_foot = etree.HTML(nr_footer)
+                foot.insert(len(foot.getchildren()),
+                            o_foot)  # After the last child of body
 
         return result
