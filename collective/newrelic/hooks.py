@@ -19,7 +19,8 @@ def newrelic_transaction(event):
         # to the browserview it simplifies. Making it hard to make a proper dotted name.
         # Preffered name would be:  Products.MyProduct.browser.views.MyView
         # Now we only get the name as defined in conifure zcml, ie: "my_view"
-        transname = published.__name__
+        # Sometimes "published" is simply a string, so fallback to that.
+        transname = getattr(published, '__name__', str(published))
 
         if trans:
             # We only want to track the following:

@@ -18,7 +18,11 @@ import zope_event
 
 import catalog_tool
 
-import talinterpreter
+try:
+    import five.pt
+    import chameleon_patch
+except ImportError:
+    import talinterpreter
 
 import cron4plone
 
