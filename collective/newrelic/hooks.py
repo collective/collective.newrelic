@@ -4,6 +4,7 @@ from zope.browserresource.interfaces import IResource
 from zope.pagetemplate.interfaces import IPageTemplate
 import newrelic.agent
 import newrelic.api
+from collective.newrelic.patches.zserverpublisher import PLACEHOLDER
 
 # IPubAfterTraversal hook for naming our transactions!
 
@@ -19,8 +20,8 @@ def newrelic_transaction(event):
         # to the browserview it simplifies. Making it hard to make a proper dotted name.
         # Preffered name would be:  Products.MyProduct.browser.views.MyView
         # Now we only get the name as defined in conifure zcml, ie: "my_view"
-        # Sometimes "published" is simply a string, so fallback to that.
-        transname = getattr(published, '__name__', str(published))
+        # Sometimes "published" is simply a string, so fallback to placholder.
+        transname = getattr(published, '__name__', PLACEHOLDER)
 
         if trans:
             # We only want to track the following:
