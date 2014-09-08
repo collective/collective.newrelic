@@ -72,8 +72,16 @@ class NewRelic(object):
             nr_footer = trans.browser_timing_footer()
             if nr_header and nr_footer:
                 o_head = fragment_fromstring(nr_header)
+                # Use a comment wrapper to avoid XML entity conversion
+                head_script = etree.Comment('\n' + o_head.text + '\n//')
+                o_head.text = '//'
+                o_head.append(head_script)
                 head.insert(0, o_head)  # Before the first child of head
+
                 o_foot = fragment_fromstring(nr_footer)
+                foot_script = etree.Comment('\n' + o_foot.text + '\n//')
+                o_foot.text = '//'
+                o_foot.append(foot_script)
                 foot.insert(len(foot.getchildren()),
                             o_foot)  # After the last child of body
 
