@@ -21,7 +21,7 @@ def newrelic_transaction(event):
         # Preffered name would be:  Products.MyProduct.browser.views.MyView
         # Now we only get the name as defined in conifure zcml, ie: "my_view"
         # Sometimes "published" is simply a string, so fallback to placholder.
-        transname = getattr(published, '__name__', PLACEHOLDER)
+        transname = getattr(published, '__view_name__', getattr(published, '__name__', PLACEHOLDER))
 
         if trans:
             # We only want to track the following:
