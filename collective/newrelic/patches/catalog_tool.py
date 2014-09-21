@@ -10,7 +10,11 @@ CatalogTool.original_cmfplone_catalogtool_searchResults = CatalogTool.searchResu
 def newrelic_searchResults(self, REQUEST=None, **kw):
     trans = newrelic.agent.current_transaction()
 
-    with newrelic.api.database_trace.DatabaseTrace(trans, str(kw), self):
+    if isinstance(REQUEST, dict):
+    	dump = str(REQUEST)
+    else:
+    	dump = str(kw)
+    with newrelic.api.database_trace.DatabaseTrace(trans, dump, self):
         result = self.original_cmfplone_catalogtool_searchResults(REQUEST, **kw)
 
     return result
