@@ -30,7 +30,9 @@ def newrelic_transaction(event):
             # 3. PageTemplate's in ZMI
             if (IBrowserView.providedBy(published) or IPageTemplate.providedBy(published)) and not IResource.providedBy(published):
                 trans.name_transaction(transname, group='Zope2', priority=1)
-                if hasattr(published, 'context'):  # Plone
+                if (hasattr(published, 'context') and
+                      hasattr(published.context, 'id') and
+                      hasattr(published.context, 'absolute_url')):  # Plone
                     newrelic.agent.add_custom_parameter('id', published.context.id)
                     newrelic.agent.add_custom_parameter('absolute_url', published.context.absolute_url())
                 elif hasattr(published, 'id') and hasattr(published, 'absolute_url'):  # Zope
