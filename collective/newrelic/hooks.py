@@ -31,6 +31,8 @@ def newrelic_transaction(event):
                 else:
                     klass = klass.__bases__[0]
                     transname = klass.__module__ + '.' + klass.__name__
+            elif klass.__name__ in ('FSPageTemplate', 'FSControllerPageTemplate'):
+                transname = os.path.basename(published._filepath)
             else:
                 transname = klass.__module__ + '.' + klass.__name__
 
