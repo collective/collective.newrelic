@@ -1,3 +1,4 @@
+from AccessControl import getSecurityManager
 from collective.newrelic.utils import logger
 from zope.browser.interfaces import IBrowserView
 from zope.browserresource.interfaces import IResource
@@ -43,6 +44,9 @@ def newrelic_transaction(event):
             # 3. PageTemplate's in ZMI
             if (IBrowserView.providedBy(published) or IPageTemplate.providedBy(published)) and not IResource.providedBy(published):
                 trans.name_transaction(transname, group='Zope2', priority=1)
+                user = getSecurityManager().getUser()
+                user_id = user.getId() if user else ''
+                newrelic.agent.add_custom_parameter('user', user_id)
                 if hasattr(published, 'context'):  # Plone
                     newrelic.agent.add_custom_parameter('id', published.context.id)
                     newrelic.agent.add_custom_parameter('absolute_url', published.context.absolute_url())
