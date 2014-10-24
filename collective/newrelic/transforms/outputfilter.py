@@ -17,6 +17,7 @@ from lxml.html import fragment_fromstring
 from repoze.xmliter.utils import getHTMLSerializer
 from collective.newrelic.patches.zserverpublisher import PLACEHOLDER
 
+
 class NewRelic(object):
     """Outputfilter that adds NewRelic Real User Monitoring to content.
 
@@ -53,6 +54,10 @@ class NewRelic(object):
         return self.transformIterable([result], encoding)
 
     def transformIterable(self, result, encoding):
+        settings = newrelic.agent.global_settings()
+        if not settings.browser_monitoring.auto_instrument:
+            return result
+
         result = self.parseTree(result)
         if result is None:
             return None
