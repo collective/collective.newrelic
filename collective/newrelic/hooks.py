@@ -25,12 +25,12 @@ def newrelic_transaction(event):
             # We only want to track the following:
             # 1. BrowserViews (but not the resource kind ..)
             # 2. PageTemplate (/skins/*/*.pt ) being used as views
-            # 3. PageTemplate's in ZMI
+            # 3. PageTemplates in ZMI
             if (IBrowserView.providedBy(published) or IPageTemplate.providedBy(published)) and not IResource.providedBy(published):
                 trans.name_transaction(transname, group='Zope2', priority=1)
                 if hasattr(published, 'context'):  # Plone
-                    newrelic.agent.add_custom_parameter('id', published.context.id)
-                    newrelic.agent.add_custom_parameter('absolute_url', published.context.absolute_url())
+                    newrelic.agent.add_custom_parameter('id', getattr(published.context, 'id', ''))
+                    newrelic.agent.add_custom_parameter('absolute_url', getattr(published.context, 'absolute_url', ''))
                 elif hasattr(published, 'id') and hasattr(published, 'absolute_url'):  # Zope
                     newrelic.agent.add_custom_parameter('id', published.id)
                     newrelic.agent.add_custom_parameter('absolute_url', published.absolute_url())
