@@ -47,7 +47,7 @@ def newrelic_transaction(event):
                 user = getSecurityManager().getUser()
                 user_id = user.getId() if user else ''
                 newrelic.agent.add_custom_parameter('user', user_id)
-                if hasattr(published, 'context'):  # Plone
+                if hasattr(published, 'context') and hasasttr(published.context, 'absolute_url'):  # Plone
                     newrelic.agent.add_custom_parameter('id', published.context.id)
                     newrelic.agent.add_custom_parameter('absolute_url', published.context.absolute_url())
                 elif hasattr(published, 'id') and hasattr(published, 'absolute_url'):  # Zope
