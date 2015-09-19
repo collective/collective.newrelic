@@ -1,5 +1,6 @@
 from collective.newrelic.utils import logger
 from newrelic.api.transaction import Transaction
+from newrelic.core.database_node import DatabaseNode
 
 original__init__ = Transaction.__init__
 original__exit__ = Transaction.__exit__
@@ -23,3 +24,15 @@ def patched__exit__(self, *args, **kwargs):
 
 Transaction.__exit__ = patched__exit__
 logger.info("Patched newrelic.api.transaction:Transaction.__exit__ to check _transaction_id")
+
+
+def patched_db_node_product(self):
+    try:
+        return self._orig_product
+    except AttributeError:
+        return u"ZODB"
+
+if getattr(DatabaseNode, 'product', None) is not None:
+    DatabaseNode._orig_product = DatabaseNode.product
+    DatabaseNode.product = property(patched_db_node_product)
+    logger.info("Patched newrelic.core.database_node:DatabaseNode.product to provide a default DB")
