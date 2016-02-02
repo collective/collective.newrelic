@@ -1,3 +1,4 @@
+from AccessControl import getSecurityManager
 from collective.newrelic.utils import logger
 from zope.browser.interfaces import IBrowserView
 from zope.browserresource.interfaces import IResource
@@ -31,6 +32,8 @@ def newrelic_transaction(event):
                 else:
                     klass = klass.__bases__[0]
                     transname = klass.__module__ + '.' + klass.__name__
+            elif klass.__name__ in ('FSPageTemplate', 'FSControllerPageTemplate'):
+                transname = os.path.basename(published._filepath)
             else:
                 transname = klass.__module__ + '.' + klass.__name__
 
@@ -41,9 +44,12 @@ def newrelic_transaction(event):
             # 3. PageTemplates in ZMI
             if (IBrowserView.providedBy(published) or IPageTemplate.providedBy(published)) and not IResource.providedBy(published):
                 trans.name_transaction(transname, group='Zope2', priority=1)
-                if hasattr(published, 'context'):  # Plone
-                    newrelic.agent.add_custom_parameter('id', getattr(published.context, 'id', ''))
-                    newrelic.agent.add_custom_parameter('absolute_url', getattr(published.context, 'absolute_url', ''))
+                user = getSecurityManager().getUser()
+                user_id = user.getId() if user else ''
+                newrelic.agent.add_custom_parameter('user', user_id)
+                if hasattr(published, 'context') and hasattr(published.context, 'absolute_url'):  # Plone
+                    newrelic.agent.add_custom_parameter('id', published.context.id)
+                    newrelic.agent.add_custom_parameter('absolute_url', published.context.absolute_url())
                 elif hasattr(published, 'id') and hasattr(published, 'absolute_url'):  # Zope
                     newrelic.agent.add_custom_parameter('id', published.id)
                     newrelic.agent.add_custom_parameter('absolute_url', published.absolute_url())
