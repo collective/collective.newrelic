@@ -1,13 +1,10 @@
-from plone.transformchain.transformer import (
-                                                ConflictError,\
-                                                getAdapters,\
-                                                ITransform,\
-                                                LOGGER,\
-                                                sort_key,\
-                                                Transformer,\
-                                                DISABLE_TRANSFORM_REQUEST_KEY,
-                                                )
+from plone.transformchain.transformer import Transformer, LOGGER
+from operator import attrgetter
+from zope.component import getAdapters
+from ZODB.POSException import ConflictError
 from ZServer.FTPRequest import FTPRequest
+from plone.transformchain.interfaces import DISABLE_TRANSFORM_REQUEST_KEY
+from plone.transformchain.interfaces import ITransform
 
 import newrelic.agent
 from collective.newrelic.utils import logger
@@ -29,12 +26,12 @@ def newrelic_transform__call__(self, request, result, encoding):
     try:
         published = request.get('PUBLISHED', None)
 
-        handlers = [v[1] for v in getAdapters((published, request,), ITransform)]
-        handlers.sort(sort_key)
-
+        handlers = (
+            v[1] for v in getAdapters((published, request,), ITransform)
+        )
         trans = newrelic.agent.current_transaction()
 
-        for handler in handlers:
+        for handler in sorted(handlers, key=attrgetter('order')):
             with newrelic.agent.FunctionTrace(trans, handler.__class__.__name__, 'Zope/Transform'):
 
                 if isinstance(result, unicode):
