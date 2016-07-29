@@ -43,7 +43,7 @@ class NewRelic(object):
 
         try:
             return getHTMLSerializer(result, pretty_print=False)
-        except (TypeError, etree.ParseError):
+        except (AttributeError, TypeError, etree.ParseError):
             return None
 
     def transformString(self, result, encoding):
