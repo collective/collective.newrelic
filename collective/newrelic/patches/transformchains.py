@@ -51,7 +51,7 @@ def newrelic_transform__call__(self, request, result, encoding):
     except ConflictError:
         raise
     except Exception, e:
-        LOGGER.exception(u"Unexpected error whilst trying to apply transform chain")
+        LOGGER.warning(u"Unexpected error whilst trying to apply transform chain")
 
 Transformer.__call__ = newrelic_transform__call__
 logger.info("Patched plone.transformchain.transformer:Transformer.__call__ with instrumentation")
