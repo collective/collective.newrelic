@@ -3,7 +3,6 @@ from plone.transformchain.transformer import (
                                                 getAdapters,\
                                                 ITransform,\
                                                 LOGGER,\
-                                                sort_key,\
                                                 Transformer,\
                                                 DISABLE_TRANSFORM_REQUEST_KEY,
                                                 )
@@ -30,7 +29,7 @@ def newrelic_transform__call__(self, request, result, encoding):
         published = request.get('PUBLISHED', None)
 
         handlers = [v[1] for v in getAdapters((published, request,), ITransform)]
-        handlers.sort(sort_key)
+        handlers.sort(key=attrgetter('order'))
 
         trans = newrelic.agent.current_transaction()
 
