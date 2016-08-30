@@ -1,3 +1,4 @@
+from operator import attrgetter
 from plone.transformchain.transformer import (
                                                 ConflictError,\
                                                 getAdapters,\
