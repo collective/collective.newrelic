@@ -12,7 +12,7 @@ from zope.component import adapts
 
 import newrelic.agent
 
-from lxml import etree
+from lxml import etree, html
 from repoze.xmliter.utils import getHTMLSerializer
 from collective.newrelic.patches.zserverpublisher import PLACEHOLDER
 
@@ -66,14 +66,16 @@ class NewRelic(object):
 
         head = result.tree.find('head')
         if head is not None and len(head):
-            nr_header = etree.HTML(trans.browser_timing_header())
+            timing_header = trans.browser_timing_header()
+            nr_header = html.fragment_fromstring(timing_header)
             head.insert(0, nr_header)  # Before the first child of head
 
         foot = result.tree.find('body')
         if foot is not None and len(foot):
             nr_footer = trans.browser_timing_footer()
             if nr_footer:
-                o = etree.HTML(trans.browser_timing_footer())
+                timing_footer = trans.browser_timing_footer()
+                o = html.fragment_fromstring(timing_footer)
                 foot.insert(len(foot.getchildren()), o)  # After the last child of body
 
         return result
