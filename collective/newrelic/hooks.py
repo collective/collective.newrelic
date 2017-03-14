@@ -1,9 +1,12 @@
+from AccessControl import getSecurityManager
 from collective.newrelic.utils import logger
 from zope.browser.interfaces import IBrowserView
 from zope.browserresource.interfaces import IResource
 from zope.pagetemplate.interfaces import IPageTemplate
 import newrelic.agent
 import newrelic.api
+import os
+from collective.newrelic.patches.zserverpublisher import PLACEHOLDER
 
 # IPubAfterTraversal hook for naming our transactions!
 
@@ -15,22 +18,38 @@ def newrelic_transaction(event):
         published = request.get('PUBLISHED', None)
         trans = newrelic.agent.current_transaction()
 
-        # TODO: Better name resolvement. SimpleViewClass seems to have no reference
-        # to the browserview it simplifies. Making it hard to make a proper dotted name.
-        # Preffered name would be:  Products.MyProduct.browser.views.MyView
-        # Now we only get the name as defined in conifure zcml, ie: "my_view"
-        transname = published.__name__
+        try:
+            klass = published.__class__
+        except AttributeError:
+            transname = PLACEHOLDER
+        else:
+            if klass.__module__ == 'Products.Five.metaclass':
+                if klass.__bases__[0].__name__ == 'ViewMixinForTemplates':
+                    try:
+                        transname = os.path.basename(klass.index.filename)
+                    except:
+                        transname = PLACEHOLDER
+                else:
+                    klass = klass.__bases__[0]
+                    transname = klass.__module__ + '.' + klass.__name__
+            elif klass.__name__ in ('FSPageTemplate', 'FSControllerPageTemplate'):
+                transname = os.path.basename(published._filepath)
+            else:
+                transname = klass.__module__ + '.' + klass.__name__
 
         if trans:
             # We only want to track the following:
             # 1. BrowserViews (but not the resource kind ..)
             # 2. PageTemplate (/skins/*/*.pt ) being used as views
-            # 3. PageTemplates in ZMI
+            # 3. PageTemplate's in ZMI
             if (IBrowserView.providedBy(published) or IPageTemplate.providedBy(published)) and not IResource.providedBy(published):
                 trans.name_transaction(transname, group='Zope2', priority=1)
-                if hasattr(published, 'context'):  # Plone
-                    newrelic.agent.add_custom_parameter('id', getattr(published.context, 'id', ''))
-                    newrelic.agent.add_custom_parameter('absolute_url', getattr(published.context, 'absolute_url', ''))
+                user = getSecurityManager().getUser()
+                user_id = user.getId() if user else ''
+                newrelic.agent.add_custom_parameter('user', user_id)
+                if hasattr(published, 'context') and hasattr(published.context, 'absolute_url'):  # Plone
+                    newrelic.agent.add_custom_parameter('id', published.context.id)
+                    newrelic.agent.add_custom_parameter('absolute_url', published.context.absolute_url())
                 elif hasattr(published, 'id') and hasattr(published, 'absolute_url'):  # Zope
                     newrelic.agent.add_custom_parameter('id', published.id)
                     newrelic.agent.add_custom_parameter('absolute_url', published.absolute_url())

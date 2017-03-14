@@ -1,9 +1,9 @@
+from operator import attrgetter
 from plone.transformchain.transformer import (
                                                 ConflictError,\
                                                 getAdapters,\
                                                 ITransform,\
                                                 LOGGER,\
-                                                sort_key,\
                                                 Transformer,\
                                                 DISABLE_TRANSFORM_REQUEST_KEY,
                                                 )
@@ -30,7 +30,7 @@ def newrelic_transform__call__(self, request, result, encoding):
         published = request.get('PUBLISHED', None)
 
         handlers = [v[1] for v in getAdapters((published, request,), ITransform)]
-        handlers.sort(sort_key)
+        handlers.sort(key=attrgetter('order'))
 
         trans = newrelic.agent.current_transaction()
 
@@ -51,7 +51,7 @@ def newrelic_transform__call__(self, request, result, encoding):
     except ConflictError:
         raise
     except Exception, e:
-        LOGGER.exception(u"Unexpected error whilst trying to apply transform chain")
+        LOGGER.warning(u"Unexpected error whilst trying to apply transform chain")
 
 Transformer.__call__ = newrelic_transform__call__
 logger.info("Patched plone.transformchain.transformer:Transformer.__call__ with instrumentation")

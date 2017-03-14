@@ -12,7 +12,8 @@ from zope.component import adapts
 
 import newrelic.agent
 
-from lxml import etree, html
+from lxml import etree
+from lxml.html import fragment_fromstring
 from repoze.xmliter.utils import getHTMLSerializer
 from collective.newrelic.patches.zserverpublisher import PLACEHOLDER
 
@@ -42,7 +43,7 @@ class NewRelic(object):
 
         try:
             return getHTMLSerializer(result, pretty_print=False)
-        except (TypeError, etree.ParseError):
+        except (AttributeError, TypeError, etree.ParseError):
             return None
 
     def transformString(self, result, encoding):
@@ -65,17 +66,23 @@ class NewRelic(object):
             return result
 
         head = result.tree.find('head')
-        if head is not None and len(head):
-            timing_header = trans.browser_timing_header()
-            nr_header = html.fragment_fromstring(timing_header)
-            head.insert(0, nr_header)  # Before the first child of head
-
         foot = result.tree.find('body')
-        if foot is not None and len(foot):
+        if head is not None and len(head) and foot is not None and len(foot):
+            nr_header = trans.browser_timing_header()
             nr_footer = trans.browser_timing_footer()
-            if nr_footer:
-                timing_footer = trans.browser_timing_footer()
-                o = html.fragment_fromstring(timing_footer)
-                foot.insert(len(foot.getchildren()), o)  # After the last child of body
+            if nr_header and nr_footer:
+                o_head = fragment_fromstring(nr_header)
+                # Use a comment wrapper to avoid XML entity conversion
+                head_script = etree.Comment('\n' + o_head.text + '\n//')
+                o_head.text = '//'
+                o_head.append(head_script)
+                head.insert(0, o_head)  # Before the first child of head
+
+                o_foot = fragment_fromstring(nr_footer)
+                foot_script = etree.Comment('\n' + o_foot.text + '\n//')
+                o_foot.text = '//'
+                o_foot.append(foot_script)
+                foot.insert(len(foot.getchildren()),
+                            o_foot)  # After the last child of body
 
         return result
