@@ -1,0 +1,16 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:meta="http://namespaces.zope.org/meta"
+    i18n_domain="collective.newrelic">
+
+    <meta:directives namespace="http://namespaces.plone.org/newrelic">
+
+        <meta:directive
+            name="wrap"
+            schema=".meta.INewrelicWrapDirective"
+            handler=".meta.wrap"
+            />
+
+    </meta:directives>
+
+</configure>
