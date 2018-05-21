@@ -25,8 +25,7 @@ def newrelic__init__(self, accept):
 
                 try:
                     application = newrelic.api.application.application_instance()
-                    environ = {}
-                    trans = newrelic.api.web_transaction.WebTransaction(application, environ)
+                    trans = newrelic.api.web_transaction.WebTransaction(application, a.environ)
                     trans.name_transaction(PLACEHOLDER, group='Zope2', priority=1)
                     trans.__enter__()
 
