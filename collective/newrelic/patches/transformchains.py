@@ -29,9 +29,9 @@ def newrelic_transform__call__(self, request, result, encoding):
     try:
         published = request.get('PUBLISHED', None)
 
-        handlers = (
+        handlers = [
             v[1] for v in getAdapters((published, request,), ITransform)
-        )
+        ]
         handlers.sort(key=attrgetter('order'))
 
         trans = newrelic.agent.current_transaction()
