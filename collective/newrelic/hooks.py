@@ -42,8 +42,13 @@ def newrelic_transaction(event):
             # 1. BrowserViews (but not the resource kind ..)
             # 2. PageTemplate (/skins/*/*.pt ) being used as views
             # 3. PageTemplates in ZMI
+            if hasattr(trans, 'name_transaction'):
+                rename_trans = trans.name_transaction
+            else:
+                rename_trans = trans.set_transaction_name
+
             if (IBrowserView.providedBy(published) or IPageTemplate.providedBy(published)) and not IResource.providedBy(published):
-                trans.name_transaction(transname, group='Zope2', priority=1)
+                rename_trans(transname, group='Zope2', priority=1)
                 user = getSecurityManager().getUser()
                 user_id = user.getId() if user else ''
                 newrelic.agent.add_custom_parameter('user', user_id)
