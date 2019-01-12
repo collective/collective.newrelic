@@ -13,8 +13,8 @@ from collective.newrelic.utils import logger
 
 PLACEHOLDER = "PLACEHOLDER"
 
+
 def newrelic__init__(self, accept):
-    from sys import exc_info
     from ZPublisher import publish_module
     from ZPublisher.WSGIPublisher import publish_module as publish_wsgi
     trans = None
@@ -38,7 +38,8 @@ def newrelic__init__(self, accept):
                     if trans:
                         if trans.name == 'PLACEHOLDER':
                             newrelic.agent.ignore_transaction()
-                        trans.__exit__(None, None, None)
+                        if getattr(trans, 'current_node', None):
+                            trans.__exit__(None, None, None)
                     a = b = None
 
             elif name == "Zope2WSGI":
