@@ -1,4 +1,4 @@
-
+import sys
 from ZServer.PubCore.ZServerPublisher import ZServerPublisher
 import newrelic.agent
 import newrelic.api
@@ -44,7 +44,7 @@ def newrelic__init__(self, accept):
                         if trans.name == 'PLACEHOLDER':
                             newrelic.agent.ignore_transaction()
                         if getattr(trans, 'current_node', None):
-                            trans.__exit__(None, None, None)
+                            trans.__exit__(*sys.exc_info())
                     a = b = None
 
             elif name == "Zope2WSGI":
