@@ -26,7 +26,12 @@ def newrelic__init__(self, accept):
                 try:
                     application = newrelic.api.application.application_instance()
                     trans = newrelic.api.web_transaction.WebTransaction(application, a.environ)
-                    trans.name_transaction(PLACEHOLDER, group='Zope2', priority=1)
+                    if hasattr(trans, 'name_transaction'):
+                        rename_trans = trans.name_transaction
+                    else:
+                        rename_trans = trans.set_transaction_name
+                    rename_trans(PLACEHOLDER, group='Zope2', priority=1)
+
                     trans.__enter__()
 
                     publish_module(
