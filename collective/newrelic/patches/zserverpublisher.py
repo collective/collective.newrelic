@@ -12,6 +12,7 @@ original__init__ = ZServerPublisher.__init__
 from collective.newrelic.utils import logger
 
 PLACEHOLDER = "PLACEHOLDER"
+_MARKER = []
 
 
 def newrelic__init__(self, accept):
@@ -43,7 +44,7 @@ def newrelic__init__(self, accept):
                     if trans:
                         if trans.name == 'PLACEHOLDER':
                             newrelic.agent.ignore_transaction()
-                        if getattr(trans, 'current_node', None):
+                        if getattr(trans, 'current_node', _MARKER) is not None:
                             trans.__exit__(*sys.exc_info())
                     a = b = None
 
