@@ -12,7 +12,11 @@
     <subscriber                                                                
       for="ZPublisher.interfaces.IPubAfterTraversal"             
       handler=".hooks.newrelic_transaction"                              
-      />    
+      />
+    
+    <subscriber
+      for="ZPublisher.interfaces.IPubEnd"
+      handler=".hooks.newrelic_precommit"
+      />
 
 </configure>
-
