@@ -80,7 +80,7 @@ def newrelic_precommit(event):
     request = event.request
     for object in request['PARENTS'][::1]:
         conn = getattr(object, '_p_jar', None)
-        if conn is not None:
+        if conn is not None and getattr(conn, 'getTransferCounts', None):
             loaded, stored = conn.getTransferCounts()
             newrelic.agent.add_custom_parameter('zodb_loaded', loaded)
             newrelic.agent.add_custom_parameter('zodb_stored', stored)
