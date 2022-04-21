@@ -42,7 +42,7 @@ def newrelic_transform__call__(self, request, result, encoding):
         trans = newrelic.agent.current_transaction()
 
         for handler in handlers:
-            with newrelic.agent.FunctionTrace(trans, handler.__class__.__name__, 'Zope/Transform'):
+            with newrelic.agent.FunctionTrace(handler.__class__.__name__, 'Zope/Transform'):
 
                 if isinstance(result, text_type):
                     newResult = handler.transformUnicode(result, encoding)

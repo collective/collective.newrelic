@@ -1,7 +1,7 @@
 Introduction
 ------------
 
-This package offers instrumentation for NewRelic ( http://www.newrelic.com ). Currently the catalog-tool, transformchains and zope-events are instrumented. A transform is included to support RUM (Real-User-Monitoring): it inserts small snippets of javascript at the top and bottom of the rendered pages. RUM does not work in the ZMI (Zope Management Interface).
+This package offers instrumentation for NewRelic ( http://www.newrelic.com ). Currently the catalog-tool, transformchains and zope-events are instrumented. A transform is included to support RUM (Real-User-Monitoring): it inserts small snippets of javascript at the top and bottom of the rendered pages. RUM does not work in the ZMI (Zope Management Interface). This currently requires newrelic >= v5.0
 
 Installation
 ------------
@@ -14,10 +14,9 @@ You can add this egg 'collective.newrelic' to your eggs and it will pull in the 
     versions=versions
     
     [versions]
-    newrelic = 2.18.1.15
+    newrelic = 7.10.0.175
     repoze.xmliter = 0.5
-    # update to 1.0.9 on next release:
-    collective.newrelic = 1.0.8 
+    collective.newrelic = 2.0.0
 
     # ...or allow picked versions and risk breakage on product updates
     #allow-picked-versions = true
