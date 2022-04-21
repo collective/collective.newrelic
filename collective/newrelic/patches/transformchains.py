@@ -1,3 +1,5 @@
+from six import text_type
+from six import binary_type
 from operator import attrgetter
 from plone.transformchain.transformer import (
     LOGGER,
@@ -5,7 +7,10 @@ from plone.transformchain.transformer import (
 )
 from ZODB.POSException import ConflictError
 from zope.component import getAdapters
-from ZServer.FTPRequest import FTPRequest
+try:
+    from ZServer.FTPRequest import FTPRequest
+except ImportError:
+    FTPRequest = type(None)
 from plone.transformchain.interfaces import DISABLE_TRANSFORM_REQUEST_KEY
 from plone.transformchain.interfaces import ITransform
 
@@ -39,9 +44,9 @@ def newrelic_transform__call__(self, request, result, encoding):
         for handler in handlers:
             with newrelic.agent.FunctionTrace(trans, handler.__class__.__name__, 'Zope/Transform'):
 
-                if isinstance(result, unicode):
+                if isinstance(result, text_type):
                     newResult = handler.transformUnicode(result, encoding)
-                elif isinstance(result, str):
+                elif isinstance(result, binary_type):
                     newResult = handler.transformBytes(result, encoding)
                 else:
                     newResult = handler.transformIterable(result, encoding)
@@ -52,8 +57,8 @@ def newrelic_transform__call__(self, request, result, encoding):
         return result
     except ConflictError:
         raise
-    except Exception, e:
-        LOGGER.warning(u"Unexpected error whilst trying to apply transform chain")
+    except Exception as e:
+        LOGGER.exception(u"Unexpected error whilst trying to apply transform chain")
 
 Transformer.__call__ = newrelic_transform__call__
 logger.info("Patched plone.transformchain.transformer:Transformer.__call__ with instrumentation")

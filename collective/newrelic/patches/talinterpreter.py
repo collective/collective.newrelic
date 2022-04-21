@@ -1,3 +1,4 @@
+from six import string_types
 from zope.tal.talinterpreter import TALInterpreter
 
 import newrelic.agent
@@ -9,7 +10,7 @@ original_function = TALInterpreter.__call__
 def monkeypatch(self):
     probable_name = self.program[2][1]
     name = "Value (non-file)"
-    if type(probable_name) in [str, unicode]:
+    if isinstance(probable_name, string_types):
         name = probable_name.split('/')
         name = name[-1]
 

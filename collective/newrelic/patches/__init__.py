@@ -4,29 +4,30 @@ import newrelic.agent
 
 #Patch newrelic_application to work with a threading.local for early (own thread!) lock checking
 # import newrelic_application
-import newrelic_transaction
+from . import newrelic_transaction
 
-# This is one is required: it creates the 'webtransaction'
-import zserverpublisher
+try:
+    # This is one is required: it creates the 'webtransaction'
+    from . import zserverpublisher
+except (ImportError, ModuleNotFoundError):
+    pass
 
 # Enable/disable as you like
-import zpublisher_mapply
+from . import zpublisher_mapply
 
-import transformchains
+from . import transformchains
 
-import zope_event
+from . import zope_event
 
-import catalog_tool
+from . import catalog_tool
 
 try:
     import five.pt
-    import chameleon_patch
+    from . import chameleon_patch
 except ImportError:
-    import talinterpreter
+    from . import talinterpreter
 
-import cron4plone
-
-import Globals
+from . import cron4plone
 
 import os
 

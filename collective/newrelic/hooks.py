@@ -6,7 +6,7 @@ from zope.pagetemplate.interfaces import IPageTemplate
 import newrelic.agent
 import newrelic.api
 import os
-from collective.newrelic.patches.zserverpublisher import PLACEHOLDER
+from collective.newrelic.utils import PLACEHOLDER
 
 # IPubAfterTraversal hook for naming our transactions!
 
@@ -71,7 +71,7 @@ def newrelic_transaction(event):
                     IResource.providedBy(published),
                     IPageTemplate.providedBy(published)))
 
-    except Exception, e:
+    except Exception as e:
         # Log it and carry on.
         logger.exception(e)
 

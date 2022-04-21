@@ -1,4 +1,4 @@
-from zope.interface import implements, Interface
+from zope.interface import implementer, Interface
 from plone.transformchain.interfaces import ITransform
 
 # Try to use plone.app.theming. If that fails use zope.interface.Interface
@@ -8,24 +8,24 @@ try:
 except ImportError:
     from zope.interface import Interface as IThemingLayer
 
-from zope.component import adapts
+from zope.component import adapter
 
 import newrelic.agent
 
 from lxml import etree
 from lxml.html import fragment_fromstring
 from repoze.xmliter.utils import getHTMLSerializer
-from collective.newrelic.patches.zserverpublisher import PLACEHOLDER
+from collective.newrelic.utils import PLACEHOLDER
 
 
+@implementer(ITransform)
+@adapter(Interface, IThemingLayer)
 class NewRelic(object):
     """Outputfilter that adds NewRelic Real User Monitoring to content.
 
     Late stage in the 8000's transform chain. When plone.app.blocks is
     used, we can benefit from lxml parsing having taken place already.
     """
-    implements(ITransform)
-    adapts(Interface, IThemingLayer)
 
     order = 8860  # Later than Diazo (8850)
 

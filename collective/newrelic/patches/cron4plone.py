@@ -4,7 +4,7 @@ from collective.newrelic.utils import logger
 try:
     from Products.cron4plone.browser.views.cron_tick import CronTick
     HAS_CRON4PLONE = True
-except ImportError, e:
+except ImportError as e:
     # Doesn't have it!
     pass
 

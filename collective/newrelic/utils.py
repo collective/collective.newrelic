@@ -3,6 +3,8 @@ import newrelic.agent
 import logging
 logger = logging.getLogger('collective.newrelic')
 
+PLACEHOLDER = "PLACEHOLDER"
+
 
 def newrelic_wrapper(our_class, orig_func, newrelic_label):
     """Newrelic wrapper for given class/module and function.

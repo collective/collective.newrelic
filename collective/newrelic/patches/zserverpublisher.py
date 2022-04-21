@@ -1,4 +1,6 @@
 import sys
+from collective.newrelic.utils import PLACEHOLDER
+
 from ZServer.PubCore.ZServerPublisher import ZServerPublisher
 import newrelic.agent
 import newrelic.api
@@ -11,7 +13,6 @@ LOG = logging.getLogger('ZServerPublisher')
 original__init__ = ZServerPublisher.__init__
 from collective.newrelic.utils import logger
 
-PLACEHOLDER = "PLACEHOLDER"
 _MARKER = []
 
 
