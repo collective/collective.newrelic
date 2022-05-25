@@ -78,7 +78,7 @@ def newrelic_transaction(event):
 
 def newrelic_precommit(event):
     request = event.request
-    for object in request['PARENTS'][::1]:
+    for object in request.get('PARENTS', ())[::1]:
         conn = getattr(object, '_p_jar', None)
         if conn is not None and getattr(conn, 'getTransferCounts', None):
             loaded, stored = conn.getTransferCounts()
