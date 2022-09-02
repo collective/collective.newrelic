@@ -26,8 +26,6 @@ except ImportError:
 
 import cron4plone
 
-import Globals
-
 import os
 
 from collective.newrelic.utils import logger 
