@@ -78,7 +78,7 @@ class NewRelic(object):
             if nr_header and nr_footer:
                 o_head = fragment_fromstring(nr_header)
                 # Use a comment wrapper to avoid XML entity conversion
-                head_script = etree.Comment('\n' + o_head.text + '\n//')
+                head_script = etree.Comment('\n' + o_head.text.replace("--", "") + '\n//')
                 o_head.text = '//'
                 o_head.append(head_script)
                 head.insert(0, o_head)  # Before the first child of head
